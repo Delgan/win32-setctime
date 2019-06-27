@@ -1,6 +1,5 @@
 import time
 import os
-import pathlib
 from os.path import getctime
 
 import pytest
@@ -48,8 +47,8 @@ def test_timestamp_exceeds_lower_bound(tmp_path):
         setctime(filepath, timestamp)
 
 
-def tes_timestamp_upper_bound(tmp_path):
-    filepath = tmp_path / "tes_timestamp_upper_bound.txt"
+def test_timestamp_upper_bound(tmp_path):
+    filepath = tmp_path / "test_timestamp_upper_bound.txt"
     timestamp = 1833029933770.9551615
     filepath.touch()
     setctime(filepath, timestamp)
