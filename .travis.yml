@@ -1,0 +1,17 @@
+language: shell
+
+os: windows
+
+env:
+  - PYTHON_VERSION="3.5.1" PATH=/c/Python35:/c/Python35/Scripts:$PATH
+  - PYTHON_VERSION="3.6.1" PATH=/c/Python36:/c/Python36/Scripts:$PATH
+  - PYTHON_VERSION="3.7.1" PATH=/c/Python37:/c/Python37/Scripts:$PATH
+
+before_install:
+  - choco install python --version $PYTHON_VERSION
+
+install:
+  - python -m pip install --user --upgrade pip setuptools
+  - python -m pip install --user -e .[dev]
+
+script: python -m pytest tests
