@@ -47,12 +47,12 @@ def test_timestamp_exceeds_lower_bound(tmp_path):
         setctime(filepath, timestamp)
 
 
-def test_timestamp_upper_bound(tmp_path):
-    filepath = tmp_path / "test_timestamp_upper_bound.txt"
-    timestamp = 1833029933770.9551615
+def test_timestamp_far_in_the_future(tmp_path):
+    filepath = tmp_path / "test_timestamp_far_in_the_future.txt"
+    timestamp = 64675581821
     filepath.touch()
     setctime(filepath, timestamp)
-    assert pytest.approx(getctime(filepath), timestamp)
+    assert getctime(filepath) == timestamp
 
 
 def test_timestamp_exceeds_upper_bound(tmp_path):
