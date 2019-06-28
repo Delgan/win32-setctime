@@ -1,11 +1,14 @@
-import time
 import os
-from os.path import getctime
+import time
 
 import pytest
 
 from win32_setctime import setctime
 
+
+def getctime(filepath):
+    # Fix for Python 3.5 not supporting pathlib
+    return os.path.getctime(str(filepath))
 
 def test_setctime(tmp_path):
     filepath = tmp_path / "test_setctime.txt"
@@ -74,7 +77,7 @@ def test_file_already_opened_read(tmp_path):
     filepath = tmp_path / "test_file_already_opened_read.txt"
     timestamp = 123456789
     filepath.touch()
-    with open(filepath, "r"):
+    with open(str(filepath), "r"):
         setctime(filepath, timestamp)
     assert getctime(filepath) == timestamp
 
@@ -82,7 +85,7 @@ def test_file_already_opened_read(tmp_path):
 def test_file_already_opened_write(tmp_path):
     filepath = tmp_path / "test_file_already_opened_write.txt"
     timestamp = 123456789
-    with open(filepath, "w"):
+    with open(str(filepath), "w"):
         setctime(filepath, timestamp)
     assert getctime(filepath) == timestamp
 
@@ -90,7 +93,7 @@ def test_file_already_opened_write(tmp_path):
 def test_file_already_opened_exclusive(tmp_path):
     filepath = tmp_path / "test_file_already_opened_write.txt"
     timestamp = 123456789
-    with open(filepath, "x"):
+    with open(str(filepath), "x"):
         setctime(filepath, timestamp)
     assert getctime(filepath) == timestamp
 
@@ -116,19 +119,19 @@ def test_forward_slash(tmp_path):
 def test_mtime_not_modified(tmp_path):
     filepath = tmp_path / "test_mtime_not_modified.txt"
     filepath.touch()
-    before = os.path.getmtime(filepath)
+    before = os.path.getmtime(str(filepath))
     time.sleep(0.1)
     setctime(filepath, 123456789)
-    assert os.path.getmtime(filepath) == before
+    assert os.path.getmtime(str(filepath)) == before
 
 
 def test_atime_not_modified(tmp_path):
     filepath = tmp_path / "test_atime_not_modified.txt"
     filepath.touch()
-    before = os.path.getatime(filepath)
+    before = os.path.getatime(str(filepath))
     time.sleep(0.1)
     setctime(filepath, 123456789)
-    assert os.path.getatime(filepath) == before
+    assert os.path.getatime(str(filepath)) == before
 
 
 def test_fix_file_tunneling(tmp_path):
@@ -137,7 +140,7 @@ def test_fix_file_tunneling(tmp_path):
     filepath.touch()
     before = getctime(filepath)
     time.sleep(0.1)
-    os.remove(filepath)
+    os.remove(str(filepath))
     filepath.touch()
     assert getctime(filepath) == before
     setctime(filepath, timestamp)
