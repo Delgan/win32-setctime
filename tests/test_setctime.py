@@ -69,7 +69,7 @@ def test_timestamp_exceeds_upper_bound(tmp_path):
 def test_file_does_not_exist(tmp_path):
     filepath = tmp_path / "test_file_does_not_exist.txt"
     timestamp = 123456789
-    with pytest.raises(OSError):
+    with pytest.raises(FileNotFoundError):
         setctime(filepath, timestamp)
 
 
