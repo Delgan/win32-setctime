@@ -6,6 +6,28 @@ try:
     CreateFileW = windll.kernel32.CreateFileW
     SetFileTime = windll.kernel32.SetFileTime
     CloseHandle = windll.kernel32.CloseHandle
+
+    CreateFileW.argtypes = (
+        wintypes.LPWSTR,
+        wintypes.DWORD,
+        wintypes.DWORD,
+        wintypes.LPVOID,
+        wintypes.DWORD,
+        wintypes.DWORD,
+        wintypes.HANDLE,
+    )
+    CreateFileW.restype = wintypes.HANDLE
+
+    SetFileTime.argtypes = (
+        wintypes.HANDLE,
+        wintypes.PFILETIME,
+        wintypes.PFILETIME,
+        wintypes.PFILETIME,
+    )
+    SetFileTime.restype = wintypes.BOOL
+
+    CloseHandle.argtypes = (wintypes.HANDLE,)
+    CloseHandle.restype = wintypes.BOOL
 except (ImportError, AttributeError, OSError, ValueError):
     SUPPORTED = False
 else:
