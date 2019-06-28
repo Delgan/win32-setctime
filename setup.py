@@ -19,6 +19,7 @@ setup(
     py_modules=["win32_setctime"],
     description="A small Python utility to set file creation time on Windows",
     long_description=readme,
+    long_description_content_type='text/markdown',
     author="Delgan",
     author_email="delgan.py@gmail.com",
     url="https://github.com/Delgan/win32-setctime",
