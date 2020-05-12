@@ -62,3 +62,28 @@ def setctime(filepath, timestamp):
 
     if not wintypes.BOOL(CloseHandle(handle)):
         raise WinError()
+
+def setmtime(filepath, timestamp):
+    """Set the "mtime" (modification time) attribute of a file given an unix timestamp (Windows only)."""
+    if not SUPPORTED:
+        raise OSError("This function is only available for the Windows platform.")
+
+    filepath = os.path.normpath(os.path.abspath(str(filepath)))
+    timestamp = int((timestamp * 10000000) + 116444736000000000)
+
+    if not 0 < timestamp < (1 << 64):
+        raise ValueError("The system value of the timestamp exceeds u64 size: %d" % timestamp)
+
+    atime = wintypes.FILETIME(0xFFFFFFFF, 0xFFFFFFFF)
+    mtime = wintypes.FILETIME(timestamp & 0xFFFFFFFF, timestamp >> 32)
+    ctime = wintypes.FILETIME(0xFFFFFFFF, 0xFFFFFFFF)
+
+    handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, 128, None))
+    if handle.value == wintypes.HANDLE(-1).value:
+        raise WinError()
+
+    if not wintypes.BOOL(SetFileTime(handle, byref(ctime), byref(atime), byref(mtime))):
+        raise WinError()
+
+    if not wintypes.BOOL(CloseHandle(handle)):
+        raise WinError()
