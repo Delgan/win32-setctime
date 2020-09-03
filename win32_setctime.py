@@ -1,11 +1,13 @@
 import os
 
 try:
-    from ctypes import windll, wintypes, byref, FormatError, WinError
+    from ctypes import byref, get_last_error, wintypes, FormatError, WinDLL, WinError
 
-    CreateFileW = windll.kernel32.CreateFileW
-    SetFileTime = windll.kernel32.SetFileTime
-    CloseHandle = windll.kernel32.CloseHandle
+    kernel32 = WinDLL("kernel32", use_last_error=True)
+
+    CreateFileW = kernel32.CreateFileW
+    SetFileTime = kernel32.SetFileTime
+    CloseHandle = kernel32.CloseHandle
 
     CreateFileW.argtypes = (
         wintypes.LPWSTR,
@@ -55,10 +57,10 @@ def setctime(filepath, timestamp):
 
     handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, 128, None))
     if handle.value == wintypes.HANDLE(-1).value:
-        raise WinError()
+        raise WinError(get_last_error())
 
     if not wintypes.BOOL(SetFileTime(handle, byref(ctime), byref(atime), byref(mtime))):
-        raise WinError()
+        raise WinError(get_last_error())
 
     if not wintypes.BOOL(CloseHandle(handle)):
-        raise WinError()
+        raise WinError(get_last_error())
