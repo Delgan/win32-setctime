@@ -55,7 +55,7 @@ def setctime(filepath, timestamp):
     mtime = wintypes.FILETIME(0xFFFFFFFF, 0xFFFFFFFF)
     ctime = wintypes.FILETIME(timestamp & 0xFFFFFFFF, timestamp >> 32)
 
-    handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, 128, None))
+    handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, 128 | 0x02000000, None))
     if handle.value == wintypes.HANDLE(-1).value:
         raise WinError(get_last_error())
 

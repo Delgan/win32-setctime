@@ -10,12 +10,21 @@ def getctime(filepath):
     # Fix for Python 3.5 not supporting pathlib
     return os.path.getctime(str(filepath))
 
+
 def test_setctime(tmp_path):
     filepath = tmp_path / "test_setctime.txt"
     timestamp = 946681200
     filepath.touch()
     setctime(filepath, timestamp)
     assert getctime(filepath) == timestamp
+
+
+def test_directory(tmp_path):
+    dirpath = tmp_path / "temp_dir"
+    timestamp = 826618926
+    dirpath.mkdir()
+    setctime(dirpath, timestamp)
+    assert getctime(dirpath) == timestamp
 
 
 def test_timestamp_negative(tmp_path):
