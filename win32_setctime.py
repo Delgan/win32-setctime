@@ -46,7 +46,7 @@ def setctime(filepath, timestamp):
         raise OSError("This function is only available for the Windows platform.")
 
     filepath = os.path.normpath(os.path.abspath(str(filepath)))
-    timestamp = int((timestamp * 10000000) + 116444736000000000)
+    timestamp = int(timestamp * 10000000) + 116444736000000000
 
     if not 0 < timestamp < (1 << 64):
         raise ValueError("The system value of the timestamp exceeds u64 size: %d" % timestamp)
