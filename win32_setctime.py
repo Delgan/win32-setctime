@@ -40,7 +40,7 @@ __version__ = "1.0.4"
 __all__ = ["setctime"]
 
 
-def setctime(filepath, timestamp):
+def setctime(filepath, timestamp, *, follow_symlinks=True):
     """Set the "ctime" (creation time) attribute of a file given an unix timestamp (Windows only)."""
     if not SUPPORTED:
         raise OSError("This function is only available for the Windows platform.")
@@ -55,7 +55,12 @@ def setctime(filepath, timestamp):
     mtime = wintypes.FILETIME(0xFFFFFFFF, 0xFFFFFFFF)
     ctime = wintypes.FILETIME(timestamp & 0xFFFFFFFF, timestamp >> 32)
 
-    handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, 128 | 0x02000000, None))
+    flags = 128 | 0x02000000
+
+    if not follow_symlinks:
+        flags |= 0x00200000
+
+    handle = wintypes.HANDLE(CreateFileW(filepath, 256, 0, None, 3, flags, None))
     if handle.value == wintypes.HANDLE(-1).value:
         raise WinError(get_last_error())
 

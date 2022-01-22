@@ -154,3 +154,26 @@ def test_fix_file_tunneling(tmp_path):
     assert getctime(filepath) == before
     setctime(filepath, timestamp)
     assert getctime(filepath) == timestamp
+
+
+@pytest.mark.parametrize("follow_symlinks", [True, False])
+def test_with_symlinks(tmp_path, follow_symlinks):
+    target_path = tmp_path / "target.txt"
+    symlink_path = tmp_path / "symlink.txt"
+    timestamp = 123456789
+    target_path.touch()
+    time.sleep(0.1)
+    symlink_path.symlink_to(target_path)
+    target_ctime = target_path.lstat().st_ctime
+    symlink_ctime = symlink_path.lstat().st_ctime
+
+    assert target_ctime != symlink_ctime
+
+    setctime(symlink_path, timestamp, follow_symlinks=follow_symlinks)
+
+    if follow_symlinks:
+        assert symlink_path.lstat().st_ctime == symlink_ctime
+        assert target_path.lstat().st_ctime == timestamp
+    else:
+        assert symlink_path.lstat().st_ctime == timestamp
+        assert target_path.lstat().st_ctime == target_ctime
