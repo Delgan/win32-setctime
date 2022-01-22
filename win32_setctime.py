@@ -36,7 +36,7 @@ else:
     SUPPORTED = os.name == "nt"
 
 
-__version__ = "1.0.4"
+__version__ = "1.1.0"
 __all__ = ["setctime"]
 
 
