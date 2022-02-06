@@ -40,7 +40,7 @@ def test_timestamp_with_nanoseconds(tmp_path):
     timestamp = 737206464.123456789
     filepath.touch()
     setctime(filepath, timestamp)
-    assert pytest.approx(getctime(filepath), timestamp)
+    assert getctime(filepath) == pytest.approx(timestamp)
 
 
 def test_timestamp_lower_bound(tmp_path):
