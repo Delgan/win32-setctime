@@ -17,6 +17,7 @@ setup(
     version=version,
     packages=["win32_setctime"],
     package_dir={"": "src"},
+    package_data={"win32_setctime": ["py.typed"]},
     description="A small Python utility to set file creation time on Windows",
     long_description=readme,
     long_description_content_type="text/markdown",

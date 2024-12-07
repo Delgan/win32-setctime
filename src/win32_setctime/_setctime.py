@@ -1,4 +1,5 @@
 import os
+import sys
 
 try:
     from ctypes import byref, get_last_error, wintypes, FormatError, WinDLL, WinError
@@ -36,7 +37,17 @@ else:
     SUPPORTED = os.name == "nt"
 
 
-def setctime(filepath, timestamp, *, follow_symlinks=True):
+if sys.version_info >= (3, 6):
+    PathLike = os.PathLike
+else:
+    from pathlib import PurePath as PathLike
+
+from typing import Union
+
+
+def setctime(
+    filepath: Union[str, PathLike], timestamp: float, *, follow_symlinks: bool = True
+) -> None:
     """Set the "ctime" (creation time) attribute of a file given an unix timestamp (Windows only)."""
     if not SUPPORTED:
         raise OSError("This function is only available for the Windows platform.")
