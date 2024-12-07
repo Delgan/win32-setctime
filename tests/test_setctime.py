@@ -3,12 +3,16 @@ import time
 
 import pytest
 
-from win32_setctime import setctime
+from win32_setctime import setctime, SUPPORTED
 
 
 def getctime(filepath):
     # Fix for Python 3.5 not supporting pathlib
     return os.path.getctime(str(filepath))
+
+
+def test_supported():
+    assert SUPPORTED
 
 
 def test_setctime(tmp_path):
