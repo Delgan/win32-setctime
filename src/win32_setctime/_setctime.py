@@ -36,10 +36,6 @@ else:
     SUPPORTED = os.name == "nt"
 
 
-__version__ = "1.1.0"
-__all__ = ["setctime"]
-
-
 def setctime(filepath, timestamp, *, follow_symlinks=True):
     """Set the "ctime" (creation time) attribute of a file given an unix timestamp (Windows only)."""
     if not SUPPORTED:

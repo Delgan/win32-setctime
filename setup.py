@@ -1,4 +1,3 @@
-import os
 import re
 
 try:
@@ -6,7 +5,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-with open("win32_setctime.py", "r") as file:
+with open("src/win32_setctime/__init__.py", "r") as file:
     regex_version = r'^__version__\s*=\s*[\'"]([^\'"]*)[\'"]'
     version = re.search(regex_version, file.read(), re.MULTILINE).group(1)
 
@@ -16,10 +15,11 @@ with open("README.md", "rb") as file:
 setup(
     name="win32_setctime",
     version=version,
-    py_modules=["win32_setctime"],
+    packages=["win32_setctime"],
+    package_dir={"": "src"},
     description="A small Python utility to set file creation time on Windows",
     long_description=readme,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="Delgan",
     author_email="delgan.py@gmail.com",
     url="https://github.com/Delgan/win32-setctime",
@@ -42,6 +42,9 @@ setup(
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: Implementation :: CPython",
     ],
