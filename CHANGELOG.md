@@ -1,4 +1,4 @@
-# [Unreleased](https://github.com/delgan/win32-setctime/compare/1.2.0...master)
+# [1.2.1](https://github.com/Delgan/win32-setctime/releases/tag/1.2.1) (2026-10-25)
 
 - Fix leak of an opened file handle when `SetFileTime` fails.
 
