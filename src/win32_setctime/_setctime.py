@@ -72,7 +72,10 @@ def setctime(
         raise WinError(get_last_error())
 
     if not wintypes.BOOL(SetFileTime(handle, byref(ctime), byref(atime), byref(mtime))):
-        raise WinError(get_last_error())
+        error = WinError(get_last_error())
+        if not wintypes.BOOL(CloseHandle(handle)):
+            raise WinError(get_last_error()) from error
+        raise error
 
     if not wintypes.BOOL(CloseHandle(handle)):
         raise WinError(get_last_error())
